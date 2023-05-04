@@ -10,7 +10,8 @@ const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (<>
-    <Splash />
+    {/* <Splash /> */}
+    <HomeScreen/>
 
     {/* <NavigationContainer>
       <Tab.Navigator>
