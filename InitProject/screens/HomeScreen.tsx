@@ -84,13 +84,14 @@ export default HomeScreen
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f2f2f2',
+    flex: 1
   },
   input: {
     borderWidth: 1,
     borderRadius: 30,
     borderColor: "#C9C9C9",
     padding: 10,
-    color: "green"
+    color: "#9A9A9D"
   },
   mainWrapper: {
     margin: 15,

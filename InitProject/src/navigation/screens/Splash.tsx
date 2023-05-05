@@ -44,13 +44,6 @@ const styles = StyleSheet.create({
             alignSelf: "center",
             transform: [{ translateY: -100 }]
       },
-      // blurFilter: {
-      //       width: "100%",
-      //       height: 64,
-      //       backgroundColor: "#6350FF",
-      //       position: "absolute",
-      //       top: 530,
-      // },
       getStarted: {
             color: "#5956E9",
             fontWeight: "700",
