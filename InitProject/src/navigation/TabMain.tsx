@@ -5,6 +5,7 @@ import HomeScreen from '../../screens/HomeScreen';
 import Wishlist from './screens/Wishlist';
 import Profile from './screens/Profile';
 import Cart from './screens/Cart';
+import ProductStack from './stacks/ProductStack';
 
 
 const Tab = createBottomTabNavigator();
@@ -14,10 +15,10 @@ const TabMain = () => {
             <>
                   <Tab.Navigator>
                         <Tab.Screen
-                              name='products'
-                              component={HomeScreen}
+                              name='homescreen'
+                              component={ProductStack}
                               options={{
-                                    headerShown: false
+                                    headerShown: false,
                               }}
                         />
                         <Tab.Screen
