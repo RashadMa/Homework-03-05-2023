@@ -2,14 +2,19 @@ import { SafeAreaView, StyleSheet, Text, View, TextInput, Image, FlatList, Touch
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { categoriesURL, productsURL } from '../actions/baseURL'
+import { ActivityIndicator } from 'react-native-paper';
 
 const HomeScreen = ({ navigation }: any) => {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
+  const [loading, setloading] = useState(true)
+  const [originalDatas, setOriginalDatas] = useState([]);
 
   useEffect(() => {
     axios.get(productsURL).then(response => {
       setProducts(response.data)
+      setOriginalDatas(response.data)
+      setloading(false);
     })
   }, [])
   useEffect(() => {
@@ -17,6 +22,11 @@ const HomeScreen = ({ navigation }: any) => {
       setCategories(response.data)
     })
   }, [])
+
+  const search = (value: string) => {
+    let filteredProducts = originalDatas.filter((q: { brand: string; }) => q.brand.toLowerCase().includes(value.toLowerCase()));
+    setProducts([...filteredProducts]);
+  }
 
   const renderProducts = ({ item }: any) => {
     return <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { id: item.id })}>
@@ -43,38 +53,42 @@ const HomeScreen = ({ navigation }: any) => {
     return <View style={styles.categoriesWrapper}>
       <Text style={styles.categories}>{item.categoryName}</Text>
     </View>
-
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.mainWrapper}>
-        <View>
-          <TextInput style={styles.input} placeholder='Search' placeholderTextColor={"grey"} />
-          <TextInput placeholder='Search' />
-        </View>
-        <View style={styles.headerWrapper}>
-          <Text style={styles.headerText}>Order online collect in store</Text>
-        </View>
-        {
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={categories}
-            renderItem={renderCategories}
-            ItemSeparatorComponent={() => <View style={{ width: 50 }} />}
-          />
-        }
-        {
-          <FlatList
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={products}
-            renderItem={renderProducts}
-          />
-        }
-      </View>
-    </SafeAreaView>
+    <>
+      <ActivityIndicator style={styles.loading} animating={loading} />
+      {
+        loading ? <></> : <SafeAreaView style={styles.container}>
+          <View style={styles.mainWrapper}>
+            <View>
+              <TextInput onChangeText={search} style={styles.input} placeholder='Search' placeholderTextColor={"grey"} />
+            </View>
+            <View style={styles.headerWrapper}>
+              <Text style={styles.headerText}>Order online collect in store</Text>
+            </View>
+            {
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={categories}
+                renderItem={renderCategories}
+                ItemSeparatorComponent={() => <View style={{ width: 50 }} />}
+              />
+            }
+            {
+              <FlatList
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={products}
+                renderItem={renderProducts}
+              />
+            }
+          </View>
+        </SafeAreaView>
+      }
+    </>
+
   )
 }
 
@@ -159,4 +173,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#5956E9",
   },
+  loading: {
+    color: '#5956E9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{ translateY: 450 }],
+  }
 })
