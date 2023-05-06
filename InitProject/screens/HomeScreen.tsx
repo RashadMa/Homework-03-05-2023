@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { categoriesURL, productsURL } from '../actions/baseURL'
 
-const HomeScreen = ({ navigation, route }: any) => {
+const HomeScreen = ({ navigation }: any) => {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
 
@@ -50,7 +50,7 @@ const HomeScreen = ({ navigation, route }: any) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.mainWrapper}>
         <View>
-          <TextInput style={styles.input} placeholder='Search' placeholderTextColor={"black"} />
+          <TextInput style={styles.input} placeholder='Search' placeholderTextColor={"grey"} />
           <TextInput placeholder='Search' />
         </View>
         <View style={styles.headerWrapper}>
@@ -89,9 +89,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 30,
     borderColor: "#C9C9C9",
-    padding: 10,
-    color: "#9A9A9D",
-
+    padding: 17,
   },
   mainWrapper: {
     margin: 15,

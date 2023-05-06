@@ -1,8 +1,7 @@
-import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const Splash = () => {
+const Splash = ({ navigation }: any) => {
       return (
             <SafeAreaView style={styles.container}>
                   <View style={styles.textWrapper}>
@@ -10,13 +9,13 @@ const Splash = () => {
                         <Text style={styles.headerText}>Gadget</Text>
                   </View>
                   <View>
-                        <Image style={styles.splash} source={require('./assets/splash.png')} />
+                        <Image style={styles.splash} source={require('../../../assets/splash.png')} />
                   </View>
                   <View >
 
                   </View>
                   <View style={styles.buttonWrapper}>
-                        <TouchableOpacity style={styles.getStartedWrapper}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Tab')} style={styles.getStartedWrapper}>
                               <Text style={styles.getStarted}>Get Started</Text>
                         </TouchableOpacity>
                   </View>
@@ -28,32 +27,34 @@ export default Splash
 
 const styles = StyleSheet.create({
       container: {
+            height: "100%",
             backgroundColor: '#5956E9',
       },
       headerText: {
-            fontWeight: "700",
-            fontSize: 45,
+            fontWeight: "800",
+            fontSize: 65,
             color: "white"
       },
       textWrapper: {
-            margin: 30
+            margin: 50
       },
       splash: {
-            width: 450,
-            height: 450,
+            width: 470,
+            height: 470,
             alignSelf: "center",
-            transform: [{ translateY: -100 }]
+            transform: [{ translateY: -100 }],
+            marginBottom: 50
       },
       getStarted: {
             color: "#5956E9",
             fontWeight: "700",
-            fontSize: 16,
+            fontSize: 20,
             textAlign: "center",
       },
       getStartedWrapper: {
             backgroundColor: "#fff",
-            width: 300,
-            height: 50,
+            width: 314,
+            height: 70,
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
