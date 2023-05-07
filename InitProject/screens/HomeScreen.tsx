@@ -3,12 +3,21 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { categoriesURL, productsURL } from '../actions/baseURL'
 import { ActivityIndicator } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SvgSearch from '../src/components/icons/Search';
 
 const HomeScreen = ({ navigation }: any) => {
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [loading, setloading] = useState(true)
   const [originalDatas, setOriginalDatas] = useState([]);
+
+
+  useEffect(() => {
+    AsyncStorage.getItem('wishlist')
+      .then(data => { console.log(data) })
+  }, [])
+
 
   useEffect(() => {
     axios.get(productsURL).then(response => {
@@ -62,6 +71,7 @@ const HomeScreen = ({ navigation }: any) => {
         loading ? <></> : <SafeAreaView style={styles.container}>
           <View style={styles.mainWrapper}>
             <View>
+              <SvgSearch style={styles.search}/>
               <TextInput onChangeText={search} style={styles.input} placeholder='Search' placeholderTextColor={"grey"} />
             </View>
             <View style={styles.headerWrapper}>
@@ -178,5 +188,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     transform: [{ translateY: 450 }],
+  },
+  search: {
+    position: 'absolute',
+    right: 20,
+    top: 14,
   }
 })

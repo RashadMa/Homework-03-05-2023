@@ -3,13 +3,84 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { productsURL } from '../../actions/baseURL';
 import { ActivityIndicator } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import SvgHeart from '../../src/components/icons/Heart';
+import SvgArrowLeft from '../../src/components/icons/ArrowLeft';
 
 
 const ProductDetail = ({ navigation, route }: any) => {
       const [detail, setDetail] = useState<any>({});
       const [loading, setloading] = useState(true)
-
+      const [wishlist, setWishlist] = useState([])
       let { id } = route.params;
+
+      // const clearAsyncStorage = async () => {
+      //       AsyncStorage.clear();
+      // }
+      // clearAsyncStorage()
+
+      // const loadWishlist = async () => {
+      //       const data = await AsyncStorage.getItem('wishlist');
+      //       if (data) {
+      //             setWishlist(JSON.parse(data));
+      //       }
+      // };
+
+      useEffect(() => {
+            AsyncStorage.getItem('wishlist')
+                  .then(data => {
+                        let wishlist = JSON.parse(data ?? '[]');
+                        setWishlist(wishlist)
+                  })
+      }, [])
+
+      const addToWishlist = async (id: any) => {
+            const data = await AsyncStorage.getItem('wishlist');
+            console.log(data);
+
+            if (data) {
+                  const parsedData = JSON.parse(data);
+                  const existingItem = parsedData.find((item: any) => item === id);
+                  if (existingItem) {
+                        console.log('Item already exists in wishlist!');
+                        return;
+                  }
+                  else {
+                        let newWishlist: any = [...wishlist, id];
+                        setWishlist(newWishlist);
+                        await AsyncStorage.setItem('wishlist', JSON.stringify(newWishlist));
+                        console.log('wishlist', wishlist);
+                  }
+            }
+      }
+
+      // const removeToDo = (id: number) => {
+
+      //       let filteredProducts = prods.filter((q: { id: number; }) => q.id != id);
+      //       setWishlist([...filteredProducts]);
+      //       AsyncStorage.setItem('todos', JSON.stringify([...filteredTodos]));
+
+      //   }
+
+
+      // const data = await AsyncStorage.getItem('wishlist');
+      // if (data) {
+      //   const wishlist = JSON.parse(data);
+      //   const existingItem = wishlist.find((item: any) => item.id === newItem.name);
+      //   if (existingItem) {
+      //     alert('Item already exists in wishlist!');
+      //     return;
+      //   }
+
+
+
+
+
+
+      // useEffect(() => {
+      //       loadWishlist();
+      // }, []);
+
       useEffect(() => {
             axios.get(productsURL + id)
                   .then(res => {
@@ -26,10 +97,10 @@ const ProductDetail = ({ navigation, route }: any) => {
                               <View style={styles.mainWrapper}>
                                     <View style={styles.navigator}>
                                           <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
-                                                <Text>---</Text>
+                                                <Text><SvgArrowLeft /></Text>
                                           </TouchableOpacity>
-                                          <TouchableOpacity>
-                                                <Text>O</Text>
+                                          <TouchableOpacity onPress={() => addToWishlist(detail.id)}>
+                                                <Text><SvgHeart /></Text>
                                           </TouchableOpacity>
                                     </View>
                                     <View style={styles.detailCardWrapper}>

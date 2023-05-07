@@ -1,5 +1,7 @@
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Wishlist = ({ navigation }: any) => {
   return (

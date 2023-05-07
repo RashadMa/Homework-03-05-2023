@@ -10,6 +10,7 @@ const Splash = ({ navigation }: any) => {
                   </View>
                   <View>
                         <Image style={styles.splash} source={require('../../../assets/splash.png')} />
+                        <Image style={styles.ss} source={require('../../../assets/Rect.png')} />
                   </View>
                   <View >
 
@@ -64,5 +65,11 @@ const styles = StyleSheet.create({
       buttonWrapper: {
             justifyContent: "center",
             flexDirection: "row",
+      },
+      ss: {
+            width: 454,
+            height: 100,
+            position: "absolute",
+            bottom: 100,
       }
 })

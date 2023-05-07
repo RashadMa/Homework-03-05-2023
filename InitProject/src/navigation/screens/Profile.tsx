@@ -1,5 +1,6 @@
 import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import SvgLocation from '../../components/icons/Location'
 
 const Profile = () => {
   return (
@@ -16,6 +17,7 @@ const Profile = () => {
             <Text style={styles.name}>Rosina Doe</Text>
           </View>
           <View style={styles.adressWrapper}>
+            <SvgLocation style={{marginRight: 15}} />
             <Text style={styles.adress}>
               Address: 43 Oxford Road
               M13 4GR {"\n"}
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: 184,
     marginBottom: 25,
-    marginLeft: 60
+    marginLeft: 40
   },
   adress: {
     fontWeight: "300",
