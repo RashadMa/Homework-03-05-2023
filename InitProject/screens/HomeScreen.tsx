@@ -5,6 +5,7 @@ import { categoriesURL, productsURL } from '../actions/baseURL'
 import { ActivityIndicator } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgSearch from '../src/components/icons/Search';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }: any) => {
   const [products, setProducts] = useState([])
@@ -12,12 +13,10 @@ const HomeScreen = ({ navigation }: any) => {
   const [loading, setloading] = useState(true)
   const [originalDatas, setOriginalDatas] = useState([]);
 
-
-  useEffect(() => {
+  useFocusEffect(() => {
     AsyncStorage.getItem('wishlist')
       .then(data => { console.log(data) })
-  }, [])
-
+  })
 
   useEffect(() => {
     axios.get(productsURL).then(response => {
@@ -71,7 +70,7 @@ const HomeScreen = ({ navigation }: any) => {
         loading ? <></> : <SafeAreaView style={styles.container}>
           <View style={styles.mainWrapper}>
             <View>
-              <SvgSearch style={styles.search}/>
+              <SvgSearch style={styles.search} />
               <TextInput onChangeText={search} style={styles.input} placeholder='Search' placeholderTextColor={"grey"} />
             </View>
             <View style={styles.headerWrapper}>

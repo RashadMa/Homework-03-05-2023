@@ -6,35 +6,26 @@ import { ActivityIndicator } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SvgHeart from '../../src/components/icons/Heart';
 import SvgArrowLeft from '../../src/components/icons/ArrowLeft';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const ProductDetail = ({ navigation, route }: any) => {
       const [detail, setDetail] = useState<any>({});
       const [loading, setloading] = useState(true)
       const [wishlist, setWishlist] = useState([])
+      const [color, setColor] = useState("white")
+      const [isInWishlist, setIsInWishlist] = useState(false);
       let { id } = route.params;
 
-      // const clearAsyncStorage = async () => {
-      //       AsyncStorage.clear();
-      // }
-      // clearAsyncStorage()
-
-      // const loadWishlist = async () => {
-      //       const data = await AsyncStorage.getItem('wishlist');
-      //       if (data) {
-      //             setWishlist(JSON.parse(data));
-      //       }
-      // };
-
-      useEffect(() => {
+      useFocusEffect(() => {
             AsyncStorage.getItem('wishlist')
                   .then(data => {
                         let wishlist = JSON.parse(data ?? '[]');
                         setWishlist(wishlist)
                   })
-      }, [])
+      })
 
-      const addToWishlist = async (id: any) => {
+      const wishlistOperations = async (id: any) => {
             const data = await AsyncStorage.getItem('wishlist');
             console.log(data);
 
@@ -42,44 +33,21 @@ const ProductDetail = ({ navigation, route }: any) => {
                   const parsedData = JSON.parse(data);
                   const existingItem = parsedData.find((item: any) => item === id);
                   if (existingItem) {
-                        console.log('Item already exists in wishlist!');
-                        return;
+                        let filteredProducts = wishlist.filter((removed: { id: number; }) => removed != id);
+                        AsyncStorage.setItem('wishlist', JSON.stringify([...filteredProducts]));
+                        setWishlist([...filteredProducts]);
+                        console.log('remove wishlist', wishlist);
                   }
                   else {
+                        setIsInWishlist(true);
+                        setColor('#5956E9');
                         let newWishlist: any = [...wishlist, id];
-                        setWishlist(newWishlist);
                         await AsyncStorage.setItem('wishlist', JSON.stringify(newWishlist));
+                        setWishlist(newWishlist);
                         console.log('wishlist', wishlist);
                   }
             }
       }
-
-      // const removeToDo = (id: number) => {
-
-      //       let filteredProducts = prods.filter((q: { id: number; }) => q.id != id);
-      //       setWishlist([...filteredProducts]);
-      //       AsyncStorage.setItem('todos', JSON.stringify([...filteredTodos]));
-
-      //   }
-
-
-      // const data = await AsyncStorage.getItem('wishlist');
-      // if (data) {
-      //   const wishlist = JSON.parse(data);
-      //   const existingItem = wishlist.find((item: any) => item.id === newItem.name);
-      //   if (existingItem) {
-      //     alert('Item already exists in wishlist!');
-      //     return;
-      //   }
-
-
-
-
-
-
-      // useEffect(() => {
-      //       loadWishlist();
-      // }, []);
 
       useEffect(() => {
             axios.get(productsURL + id)
@@ -97,10 +65,10 @@ const ProductDetail = ({ navigation, route }: any) => {
                               <View style={styles.mainWrapper}>
                                     <View style={styles.navigator}>
                                           <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
-                                                <Text><SvgArrowLeft /></Text>
+                                                <SvgArrowLeft />
                                           </TouchableOpacity>
-                                          <TouchableOpacity onPress={() => addToWishlist(detail.id)}>
-                                                <Text><SvgHeart /></Text>
+                                          <TouchableOpacity>
+                                                <SvgHeart fill={isInWishlist ? color : "white"} stroke={isInWishlist ? color : "#200E32"} onPress={() => wishlistOperations(detail.id)} />
                                           </TouchableOpacity>
                                     </View>
                                     <View style={styles.detailCardWrapper}>
