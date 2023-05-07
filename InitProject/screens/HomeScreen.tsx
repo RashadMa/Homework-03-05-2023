@@ -12,12 +12,6 @@ const HomeScreen = ({ navigation }: any) => {
   const [categories, setCategories] = useState([])
   const [loading, setloading] = useState(true)
   const [originalDatas, setOriginalDatas] = useState([]);
-
-  useFocusEffect(() => {
-    AsyncStorage.getItem('wishlist')
-      .then(data => { console.log(data) })
-  })
-
   useEffect(() => {
     axios.get(productsURL).then(response => {
       setProducts(response.data)
@@ -40,7 +34,9 @@ const HomeScreen = ({ navigation }: any) => {
     return <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { id: item.id })}>
       <View style={styles.productCard}>
         <View style={styles.productImageWrapper}>
-          <Image style={styles.productIcon} source={require("../assets/applewatchpink.png")} />
+          <Image style={styles.productIcon} source={{
+            uri: item.image,
+          }} />
         </View>
         <View style={styles.productTexts}>
           <View style={styles.productBrandWrapper}>
@@ -162,6 +158,7 @@ const styles = StyleSheet.create({
     height: 160,
     transform: [{ translateY: -50 }],
     borderRadius: 100,
+    resizeMode: "contain",
   },
   productTexts: {
     alignItems: "center",

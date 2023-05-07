@@ -17,18 +17,18 @@ const ProductDetail = ({ navigation, route }: any) => {
       const [isInWishlist, setIsInWishlist] = useState(false);
       let { id } = route.params;
 
-      useFocusEffect(() => {
+      useEffect(() => {
             AsyncStorage.getItem('wishlist')
                   .then(data => {
                         let wishlist = JSON.parse(data ?? '[]');
                         setWishlist(wishlist)
                   })
-      })
+      }, [])
+      // console.log(wishlist, "wishlist");
+
 
       const wishlistOperations = async (id: any) => {
             const data = await AsyncStorage.getItem('wishlist');
-            console.log(data);
-
             if (data) {
                   const parsedData = JSON.parse(data);
                   const existingItem = parsedData.find((item: any) => item === id);
@@ -36,7 +36,6 @@ const ProductDetail = ({ navigation, route }: any) => {
                         let filteredProducts = wishlist.filter((removed: { id: number; }) => removed != id);
                         AsyncStorage.setItem('wishlist', JSON.stringify([...filteredProducts]));
                         setWishlist([...filteredProducts]);
-                        console.log('remove wishlist', wishlist);
                   }
                   else {
                         setIsInWishlist(true);
@@ -44,7 +43,6 @@ const ProductDetail = ({ navigation, route }: any) => {
                         let newWishlist: any = [...wishlist, id];
                         await AsyncStorage.setItem('wishlist', JSON.stringify(newWishlist));
                         setWishlist(newWishlist);
-                        console.log('wishlist', wishlist);
                   }
             }
       }
@@ -74,7 +72,9 @@ const ProductDetail = ({ navigation, route }: any) => {
                                     <View style={styles.detailCardWrapper}>
                                           <View>
                                                 <View style={styles.imageWrapper}>
-                                                      <Image style={styles.productIcon} source={require("../../assets/applewatchpink.png")} />
+                                                      <Image style={styles.productIcon} source={{
+                                                            uri: detail.image,
+                                                      }} />
                                                 </View>
                                           </View>
                                           <View style={{ backgroundColor: "white" }}>
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
       productIcon: {
             width: "100%",
             height: 394.17,
-            resizeMode: "contain",
+            resizeMode: "cover",
       },
       detailTextWrapper: {},
       detailText: {
